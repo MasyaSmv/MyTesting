@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -22,6 +23,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 15,
+     *      minMessage = "Номер телефона должен иметь как минимум {{ limit }} символов",
+     *      maxMessage = "Номер телефона не должен быть длиннее {{ limit }} символов"
+     * )
      */
     private $phone;
 
@@ -38,16 +45,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type = "string", length = 255)
+     * @Assert\Regex(
+     *  pattern="[ -\/:-@\[-\`{-~^\s]",
+     *  message="Ваша фамилия не должна содержать пробелы и спецсимволы")
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type = "string", length = 255)
+     * @Assert\Regex(
+     *  pattern="[ -\/:-@\[-\`{-~^\s]",
+     *  message="Ваше име не должно содержать пробелы и спецсимволы")
      */
     private $family;
 
     /**
      * @ORM\Column(type = "string", length = 255)
+
      */
     private $invited;
 
