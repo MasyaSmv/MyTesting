@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,6 +31,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Номер телефона должен иметь как минимум {{ limit }} символов",
      *      maxMessage = "Номер телефона не должен быть длиннее {{ limit }} символов"
      * )
+     * @Assert\Regex(
+     * pattern="[\d]",
+     * message="Используйте только цифры"
+     * )
      */
     private $phone;
 
@@ -46,8 +52,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type = "string", length = 255)
      * @Assert\Regex(
-     *  pattern="[ -\/:-@\[-\`{-~^\s]",
-     *  message="Ваша фамилия не должна содержать пробелы и спецсимволы")
+     *  pattern="/^[a-z][a-z,]+$/i",
+     *  message="Ваше имя не должно содержать пробелы и спецсимволы")
      * )
      */
     private $name;
@@ -55,8 +61,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type = "string", length = 255)
      * @Assert\Regex(
-     *  pattern="[ -\/:-@\[-\`{-~^\s]",
-     *  message="Ваше име не должно содержать пробелы и спецсимволы")
+     *  pattern="/^[a-z][a-z,]+$/i",
+     *  message="Ваша фамилия не должна содержать пробелы и спецсимволы")
      */
     private $family;
 
@@ -70,6 +76,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type = "string", length = 255)
      */
     private $company;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Organization::class, inversedBy="user")
+     * @ORM\JoinTable(name="user_to_organization")
+     */
+    private Collection $organizations;
+
+    public function __construct()
+    {
+        $this->organizations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -201,6 +218,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCompany(string $company): self
     {
         $this -> company = $company;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Organization[]
+     */
+    public function getOrganizations(): Collection
+    {
+        return $this->organizations;
+    }
+
+    public function addOrganization(Organization $organization): self
+    {
+        if (!$this->organizations->contains($organization)) {
+            $this->organizations[] = $organization;
+            $organization->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrganization(Organization $organization): self
+    {
+        if ($this->organizations->removeElement($organization)) {
+            $organization->removeUser($this);
+        }
+
         return $this;
     }
 }

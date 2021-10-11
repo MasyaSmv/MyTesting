@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Organization;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,8 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
 
+        $organization = new Organization();
+
         $form = $this -> createForm(UserType::class, $user);
 
         $form->handleRequest($request);
@@ -41,7 +44,12 @@ class RegistrationController extends AbstractController
             $em -> persist($user);
             $em -> flush();
 
+            $organization -> addUser($user);
+            $em -> persist($organization);
+            $em -> flush();
+
             return $this -> redirectToRoute('app_login');
+
         }
 
         return $this -> render('registration/index.html.twig', [

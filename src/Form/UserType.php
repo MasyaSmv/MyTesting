@@ -19,6 +19,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => 'Имя',
                 // 'required' => true,
                 // 'constraints' =>[
                 //       new Length([
@@ -29,13 +30,20 @@ class UserType extends AbstractType
                 //       ]),
                 //  ],
             ])
-            ->add('family', TextType::class)
-            ->add('phone', TextType::class)
+            ->add('family', TextType::class, [
+                'label' => 'Фамилия',
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Телефон',
+            ])
             ->add('invited', EntityType::class, [
+                'label' => 'Приглашение',
                 'class' => User::class,
-
+                'choice_label' => 'name',
                 ])
-            ->add('company', TextType::class)
+            ->add('company', TextType::class, [
+                'label' => 'Организация',
+            ])
             ->add('password', repeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => ['label' => 'Пароль'],

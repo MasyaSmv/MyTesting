@@ -3,32 +3,38 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
+{{ form_start(form) }}
 <form>
   <div class="form-row">
     <div class="col-md-6 mb-3">
-      <label for="validationDefault01">Имя</label>
-      <input type="text" class="form-control" id="validationDefault01" value="Mark" required>
+    {{form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+      {# <label for="validationDefault01">Имя</label>
+      <input type="text" class="form-control" id="validationDefault01" value="Mark" required> #}
     </div>
     <div class="col-md-6 mb-3">
-      <label for="validationDefault02">Фамилия</label>
-      <input type="text" class="form-control" id="validationDefault02" value="Otto" required>
+    {{form_row(form.family, {'attr': {'class': 'form-control'}}) }}
+      {# <label for="validationDefault02">Фамилия</label>
+      <input type="text" class="form-control" id="validationDefault02" value="Otto" required> #}
     </div>
   </div>
   <div class="form-row">
     <div class="col-md-6 mb-3">
-      <label for="validationDefault03">Номер телефона</label>
-      <input type="text" class="form-control" id="validationDefault03" required>
+    {{form_row(form.phone, {'attr': {'class': 'form-control'}}) }}
+      {# <label for="validationDefault03">Номер телефона</label>
+      <input type="text" class="form-control" id="validationDefault03" required> #}
     </div>
     <div class="col-md-3 mb-3">
       <label for="validationDefault04">Кто пригласил</label>
-      <select class="custom-select" id="validationDefault04" required>
+      {{form_row(form.invited, {'attr': {'class': 'form-control'}}) }}
+      {# <select class="custom-select" id="validationDefault04" required>
         <option selected disabled value="">Choose...</option>
         <option>...</option>
-      </select>
+      </select> #}
     </div>
     <div class="col-md-3 mb-3">
-      <label for="validationDefault05">Организация</label>
-      <input type="text" class="form-control" id="validationDefault05" required>
+    {{form_row(form.company, {'attr': {'class': 'form-control'}}) }}
+      {# <label for="validationDefault05">Организация</label>
+      <input type="text" class="form-control" id="validationDefault05" required> #}
     </div>
   </div>
   <div class="form-group">
@@ -41,4 +47,5 @@
   </div>
   <button class="btn btn-primary" type="submit">Submit form</button>
 </form>
+{# {{ form_end(form) }} #}
 {% endblock %}

@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Organization;
+use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,14 +15,17 @@ class ListController extends AbstractController
     /**
      * @Route("/list", name="list")
      */
-    public function index(Request $request): Response
+    public function update(Request $request): Response
     {
-        $companies = [
-            'Apple' => 'tgergerge'
-        ];
 
-        return $this->render('list/index.html.twig', [
-            'companies' => $companies,
-        ]);
+        $em = $this -> getDoctrine() -> getManager();
+        $user = $em -> getRepository(User::class) -> findAll();
+
+
+
+            return $this -> redirectToRoute('list', [
+                'form' => $form -> createView(),
+            ]);
+
     }
 }
